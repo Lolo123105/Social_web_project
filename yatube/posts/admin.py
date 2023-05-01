@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Post, Group
+from .models import Post, Group, Comment, Follow
 
 
 class PostAdmin(admin.ModelAdmin):
@@ -13,9 +13,6 @@ class PostAdmin(admin.ModelAdmin):
     list_filter = ('pub_date',)
     empty_value_display = '-пусто-'
 
-# При регистрации модели Post источником конфигурации для неё назначаем
-# класс PostAdmin
-
 
 admin.site.register(Post, PostAdmin)
-admin.site.register(Group)
+admin.site.register(Group, Comment, Follow)

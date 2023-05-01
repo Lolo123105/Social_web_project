@@ -1,6 +1,7 @@
 from django.test import TestCase, Client
 from ..models import User, Post, Group
 from django.core.cache import cache
+from http import HTTPStatus
 
 
 class TaskURLTests(TestCase):
@@ -32,33 +33,33 @@ class TaskURLTests(TestCase):
     def test_index_url_exists_at_desired_location(self):
         """Страница /index/ доступна любому пользователю."""
         response = self.guest_client.get('/')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
 
     def test_group_url_exists_at_desired_location(self):
         """Страница /group/slug/ доступна любому пользователю."""
         response = self.guest_client.get('/group/test-slug/')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
 
     def test_post_id_url_exists_at_desired_location(self):
         """Страница /posts/post_id/ доступна любому пользователю."""
         response = self.guest_client.get('/posts/1/')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
 
     def test_url_is_404(self):
         """Страница не существует по данному адресу."""
         response = self.guest_client.get('/added/')
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
 
     # Проверяем доступность страниц для авторизованного пользователя
     def test_post_create_url_exists_at_desired_location(self):
         """Страница /create/ доступна авторизованному пользователю."""
         response = self.authorized_client.get('/create/')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
 
     def test_post_edit_url_exists_at_desired_location_authorized(self):
         """Страница /posts/post_id/edit/ доступна автору."""
         response = self.authorized_client.get('/posts/1/edit/')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
 
     def test_urls_uses_correct_template(self):
         """URL-адрес использует соответствующий шаблон."""

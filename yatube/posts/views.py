@@ -85,23 +85,22 @@ def post_edit(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     if not post.author == request.user:
         return redirect('posts:post_detail', post_id=post.id)
-    else:
-        form = PostForm(
-            request.POST or None,
-            files=request.FILES or None,
-            instance=post)
-        context = {
-            'post_id': post_id,
-            'form': form,
-            'is_edit': True,
-        }
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.author = request.user
-            post.save()
-            return redirect('posts:post_detail', post_id=post.id)
+    form = PostForm(
+        request.POST or None,
+        files=request.FILES or None,
+        instance=post)
+    context = {
+        'post_id': post_id,
+        'form': form,
+        'is_edit': True,
+    }
+    if form.is_valid():
+        post = form.save(commit=False)
+        post.author = request.user
+        post.save()
+        return redirect('posts:post_detail', post_id=post.id)
 
-        return render(request, 'posts/create_post.html', context)
+    return render(request, 'posts/create_post.html', context)
 
 
 @login_required
@@ -130,7 +129,6 @@ def follow_index(request):
 
 @login_required
 def profile_follow(request, username):
-    # Подписаться на автора
     if request.user.username == username:
         return redirect('posts:profile', username=username)
     following = get_object_or_404(User, username=username)
@@ -145,7 +143,6 @@ def profile_follow(request, username):
 
 @login_required
 def profile_unfollow(request, username):
-    # Дизлайк, отписка
     following = get_object_or_404(User, username=username)
     follower = get_object_or_404(Follow, author=following, user=request.user)
     follower.delete()

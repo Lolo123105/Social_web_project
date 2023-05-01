@@ -12,7 +12,6 @@ class FollowViewsTests(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        # Создадим запись в БД для проверки доступности адреса task/test-slug/
         cls.user_follow = User.objects.create_user(username='auth_follow')
         cls.user_other = User.objects.create_user(username='auth_other')
         cls.user_author = User.objects.create_user(username='auth_author')
@@ -31,8 +30,6 @@ class FollowViewsTests(TestCase):
 
     def setUp(self):
         cache.clear()
-        # Создаем неавторизованный клиент
-        self.guest_client = Client()
         # Создаем второй клиент
         self.authorized_follow = Client()
         self.authorized_other = Client()
